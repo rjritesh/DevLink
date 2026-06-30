@@ -1,0 +1,24 @@
+{
+  "name": "devlink",
+  "version": "1.0.0",
+  "description": "This is the backend of the DevLink project",
+  "homepage": "https://github.com/rjritesh/DevLink#readme",
+  "bugs": {
+    "url": "https://github.com/rjritesh/DevLink/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rjritesh/DevLink.git"
+  },
+  "license": "ISC",
+  "author": "Ritesh Jha",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start" : "node src/app.js",
+   "dev" : "nodemon src/app.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
