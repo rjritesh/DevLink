@@ -1,20 +1,37 @@
-const express = require("express")
+const express = require("express");
+const connectDB = require("./config/database");
+const dns = require("dns");
+
+dns.setServers([
+    '1.1.1.1',
+    '8.8.8.8',
+])
 const app = express();
 
+connectDB()
+  .then(() => {
+    console.log("Database connected successfully");
+
+    app.listen(7777, () => {
+      console.log("Server is running fine on 7777");
+    });
+  })
+  .catch((err) => {
+    console.error("Database connection failed:", err);
+  });
 
 
-app.use("/test/12",( req, res)=>{
-    res.send("Heluu from test")
+
+
+  app.post("/signup", (req, res)=>{
+const user = new User ({
+    firstName: "Ritesh",
+    lastName: "jha",
+    age: 22,
+    gender: "M",
+    emailId: "ritesh@gmail.com",
+
 })
-
-app.use("/xyz",( req, res)=>{
-    res.send("Heluu from xyz")
-})
-
-app.use("/",(req, res)=>{
-   res.send("heluu from node.js")
-})
-
-app.listen(7777, ()=>{
-    console.log('Server is running fine on 7777')
-})
+    
+    res.send("User created successfully")
+  })
