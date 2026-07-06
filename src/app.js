@@ -32,13 +32,43 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+
+
+//get the single user from API
 app.get("/user", async (req, res) => {
   
-    // const userEmail = req.body.emailId;
+  const userEmail = req.body.emailId;
   try {
-   const user =  await User.find({});
+   const user =  await User.find({ emailId :userEmail});
     res.send(user);
   } catch (error) {
     res.status(400).send("Something went wrong..");
   }
 });
+
+
+
+//get all the feeds from api
+app.get("/feed", async (req, res)=>{
+
+  try{
+    const user = await User.find({});
+    res.send(user)
+  }
+  catch(error){
+    res.status(400).send("Something went wrong")
+  }
+})
+
+
+
+app.delete("/user", async(req, res)=>{
+  const userId = req.body.userId;
+  try{
+const user = await User.findByIdAndDelete(userId);
+res.send("user deleted successfully")
+  }
+  catch(error){
+res.status(400).send("Someting wrong")
+  }
+})
