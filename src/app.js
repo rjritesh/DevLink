@@ -34,9 +34,9 @@ app.post("/signup", async (req, res) => {
 
 app.get("/user", async (req, res) => {
   
-    const userEmail = req.body.emailId;
+    // const userEmail = req.body.emailId;
   try {
-   const user =  await User.find({ emailId :userEmail});
+   const user =  await User.find({});
     res.send(user);
   } catch (error) {
     res.status(400).send("Something went wrong..");
