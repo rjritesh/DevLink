@@ -7,6 +7,8 @@ dns.setServers(["1.1.1.1", "8.8.8.8"]);
 const app = express();
 app.use(express.json());
 
+
+///database connection 
 connectDB()
   .then(() => {
     console.log("Database connected successfully");
@@ -18,6 +20,9 @@ connectDB()
   .catch((err) => {
     console.error("Database connection failed:", err);
   });
+
+
+  ////post api
 
 app.post("/signup", async (req, res) => {
   try {
@@ -31,7 +36,6 @@ app.post("/signup", async (req, res) => {
     res.status(400).send(error.message);
   }
 });
-
 
 
 //get the single user from API
@@ -61,7 +65,7 @@ app.get("/feed", async (req, res)=>{
 })
 
 
-
+//delete api/
 app.delete("/user", async(req, res)=>{
   const userId = req.body.userId;
 
@@ -73,6 +77,10 @@ res.send("user deleted successfully")
 res.status(400).send("Someting wrong")
   }
 })
+
+
+
+////update api    
 
 app.patch("/user", async (req, res)=>{
   const userId = req.body.userId;
