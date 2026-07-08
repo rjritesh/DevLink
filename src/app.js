@@ -2,6 +2,8 @@ const express = require("express");
 const connectDB = require("./config/database");
 const dns = require("dns");
 const User = require("./models/user");
+const { queryObjects } = require("v8");
+const { error } = require("console");
 
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 const app = express();
@@ -82,15 +84,27 @@ res.status(400).send("Someting wrong")
 
 ////update api    
 
-app.patch("/user", async (req, res)=>{
+app.patch("/user", async (req, res) => {
   const userId = req.body.userId;
-  const data = req.body.data;
+  const data = req.body.data;   // Agar Postman me data object bhej rahe ho
 
-  try{
-await User.findByIdAndUpdate(userId, data)
-res.send("User updated successfully")
+  try {
+    const allowedUpdates = ["photoUrl", "gender", "age", "about"];
+
+    const isUpdateAllowed = Object.keys(data).every((k) =>
+      allowedUpdates.includes(k)
+    );
+
+    if (!isUpdateAllowed) {
+      throw new Error("Update not allowed!!");
+    }
+
+    await User.findByIdAndUpdate(userId, data, {
+      runValidators: true,
+    });
+
+    res.send("User updated successfully");
+  } catch (error) {
+    res.status(400).send(error.message);
   }
-  catch(error){
-res.status(401).send("Something went wrong")
-  }
-})
+});
