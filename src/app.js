@@ -4,6 +4,7 @@ const dns = require("dns");
 const User = require("./models/user");
 const { queryObjects } = require("v8");
 const { error } = require("console");
+const { validateSignupData } = require("./utils/validation");
 
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 const app = express();
@@ -28,14 +29,10 @@ connectDB()
 
 app.post("/signup", async (req, res) => {
 
-  const existingUser = await User.findOne({
-    email: req.body.emailId
-  })
 
-  if (existingUser){
-  return  res.send("Email already exist")
-  }
+
   try {
+      validateSignupData(req)
     const user = new User(req.body);
 
     await user.save();
