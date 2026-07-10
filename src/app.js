@@ -27,6 +27,14 @@ connectDB()
   ////post api
 
 app.post("/signup", async (req, res) => {
+
+  const existingUser = await User.findOne({
+    email: req.body.emailId
+  })
+
+  if (existingUser){
+  return  res.send("Email already exist")
+  }
   try {
     const user = new User(req.body);
 
@@ -84,12 +92,12 @@ res.status(400).send("Someting wrong")
 
 ////update api    
 
-app.patch("/user", async (req, res) => {
-  const userId = req.body.userId;
-  const data = req.body.data;   // Agar Postman me data object bhej rahe ho
+app.patch("/user/:id", async (req, res) => {
+  const userId = req.body.params;
+  const data = req.body;   // Agar Postman me data object bhej rahe ho
 
   try {
-    const allowedUpdates = ["photoUrl", "gender", "age", "about"];
+    const allowedUpdates = ["photoUrl", "gender",  "about", "skills", "userId"];
 
     const isUpdateAllowed = Object.keys(data).every((k) =>
       allowedUpdates.includes(k)
@@ -97,6 +105,10 @@ app.patch("/user", async (req, res) => {
 
     if (!isUpdateAllowed) {
       throw new Error("Update not allowed!!");
+    }
+
+    if(data?.skills.length >  10 ){
+      throw new Error("Skills can not be more than 10")
     }
 
     await User.findByIdAndUpdate(userId, data, {
