@@ -90,11 +90,11 @@ res.status(400).send("Someting wrong")
 ////update api    
 
 app.patch("/user/:id", async (req, res) => {
-  const userId = req.body.params;
+  const userId = req.params.id;
   const data = req.body;   // Agar Postman me data object bhej rahe ho
 
   try {
-    const allowedUpdates = ["photoUrl", "gender",  "about", "skills", "userId"];
+    const allowedUpdates = ["photoUrl", "gender",  "about", "skills"];
 
     const isUpdateAllowed = Object.keys(data).every((k) =>
       allowedUpdates.includes(k)
@@ -104,7 +104,7 @@ app.patch("/user/:id", async (req, res) => {
       throw new Error("Update not allowed!!");
     }
 
-    if(data?.skills.length >  10 ){
+    if(data.skills && data?.skills.length >  10 ){
       throw new Error("Skills can not be more than 10")
     }
 
