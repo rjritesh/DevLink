@@ -40,10 +40,10 @@ app.post("/signup", async (req, res) => {
     //Creating a new instace of the User modal
 
     const user = new User({
-      firstName, 
+      firstName,
       lastName,
       emailId,
-      password : hashPassword,
+      password: hashPassword,
     });
 
     await user.save();
@@ -52,6 +52,27 @@ app.post("/signup", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(400).send(error.message);
+  }
+});
+
+app.post("/login", async (req, res) => {
+  try {
+    const { emailId, password } = req.body;
+    const user = await User.findOne({ emailId: emailId });
+    if (!user) {
+      throw new Error("Invalid credentials");
+    }
+    
+    const isPasswordValid =await bcrypt.compare(password, user.password);
+    if(isPasswordValid){
+      res.send("Login successfull")
+    }
+    else{
+      throw new Error ( "invalid credentials")
+    }
+
+  } catch (error) {
+    res.status(400).send(error.message)
   }
 });
 
