@@ -68,11 +68,11 @@ app.post("/login", async (req, res) => {
       res.send("Login successfull")
     }
     else{
-      throw new Error ( "invalid credentials")
+      throw new Error ( "Invalid credentials")
     }
 
   } catch (error) {
-    res.status(400).send(error.message)
+    res.status(400).send("Error: ", error.message)
   }
 });
 
