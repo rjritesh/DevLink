@@ -10,7 +10,7 @@ const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const { validateSignupData } = require("./utils/validation");
 const bcrypt = require("bcrypt");
-
+const userAuth = require("./middleware/auth")
 // ===============================
 // DNS Server Set Kar Rahe Hain
 // Taaki Internet Name Resolution Fast aur Reliable Ho
@@ -85,6 +85,10 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+
+
+
+
 // ==========================================================
 // LOGIN API
 // Existing User Ko Login Karne Ke Liye
@@ -113,7 +117,9 @@ app.post("/login", async (req, res) => {
         {
           _id: user._id,
         },
-        "secretkey@2026",
+        "secretkey@2026", {
+          expiresIn: "7d",
+        }
       );
 
       // Token Ko Cookie Me Store Kar Rahe Hain
@@ -133,12 +139,9 @@ app.post("/login", async (req, res) => {
 //  USER'S PROFILE FETCH API
 // TOKEN Ke Basis Par User Ko Fetch Karna
 // ==========================================================
-app.get("/profile", async (req, res) => {
+app.get("/profile", userAuth,  async (req, res) => {
   try {
-    const {token} = req.cookies;
-    const decoded = jwt.verify(token, "secretkey@2026");
-
-    const user = await User.findById(decoded._id);
+   const user  = req.user
 
     if (!user) {
       throw new Error("User not found");
